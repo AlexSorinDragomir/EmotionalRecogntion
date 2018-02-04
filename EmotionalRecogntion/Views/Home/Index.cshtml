@@ -1,31 +1,35 @@
 ﻿@{
     ViewBag.Title = "Home Page";
+    @Scripts.Render("~/bundles/jquery")
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+<div id="main-div">
+    <div class="jumbotron main-divs">
+        <h1>Select Photo</h1>
+        <p class="lead">Upload a photo in order to analyze it.</p>
+        <button id="chooseImageBtn" type="button" class="btn btn-warning">Choose Image</button><br/><br/>
+        <input id="inputImage" type="file" accept="image/*" onchange="loadImage(event)" hidden="true">
+        <img id="uploadedimage" />
+        <script>
+            $('#analyzePhotoBtn').on('click', function () {
+                console.log('analyze');
+            });
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+            $('#chooseImageBtn').on('click', function () {
+                $('#inputImage').click();
+            });
+
+            var loadImage = function (event) {
+                var uploadedimage = document.getElementById('uploadedimage');
+                uploadedimage.src = URL.createObjectURL(event.target.files[0]);
+                // document.getElementById('analyzePhotoBtn').disabled = false;
+                document.getElementById('analyzePhotoBtn').hidden = false;
+                document.getElementById('chooseImageBtn').innerText = 'Change Image';
+            };
+        </script>
+        <button id="analyzePhotoBtn" class="btn btn-primary btn-lg upload-button" hidden="true">Analyze Photo &raquo;</button>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    <div class="jumbotron main-divs">
+        
     </div>
 </div>

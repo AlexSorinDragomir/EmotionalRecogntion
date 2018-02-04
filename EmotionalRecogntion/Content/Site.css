@@ -22,3 +22,18 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#main-div {
+    width: 100%;
+    display: inline-flex;
+}
+
+.main-divs {
+    margin: 2px;
+    width: 90%; 
+}
+
+.upload-button {
+    margin-left: 34%;
+    margin-top: 10%;
+}
