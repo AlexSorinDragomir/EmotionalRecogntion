@@ -13,7 +13,7 @@ namespace EmotionalRecogntion.Controllers
         private readonly string defaultTheme = "bootstrap-minty";
         public ActionResult Index()
         {
-            setBootstrapCss(ViewBag);
+            SetBootstrapCss(ViewBag);
 
             return View();
         }
@@ -21,12 +21,12 @@ namespace EmotionalRecogntion.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-            setBootstrapCss(ViewBag);
+            SetBootstrapCss(ViewBag);
 
             return View();
         }
 
-        private void setBootstrapCss(dynamic viewBag)
+        private void SetBootstrapCss(dynamic viewBag)
         {
             string value = defaultTheme;
             if (Request.Cookies[bootstrapCss] != null)
@@ -35,6 +35,15 @@ namespace EmotionalRecogntion.Controllers
             }
 
             viewBag.BootstrapCss = value;
+        }
+
+        public ActionResult AnalyzeImage(string path)
+        {
+            string processName = @"C:\Users\Alex\source\repos\Emotional Recognition\EmotionalRecogntion\EmotionalRecognitionConsoleApp\EmotionalRecognitionConsoleApp\bin\Debug\EmotionalRecognitionConsoleApp.exe";
+
+            System.Diagnostics.Process.Start(processName, path);
+
+            return null;
         }
 
     }
