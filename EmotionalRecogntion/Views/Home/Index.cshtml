@@ -3,35 +3,34 @@
     @Scripts.Render("~/bundles/jquery")
 }
 
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/Home/Index.js")" type="text/javascript"></script>
+}
+
+
 <div id="main-div">
     <div class="jumbotron main-divs">
         <h1>Select Photo</h1>
         <p class="lead">Upload a photo in order to analyze it.</p>
-        <button id="chooseImageBtn" type="button" class="btn btn-warning">Choose Image</button><br/><br/>
-        <input id="inputImage" type="file" accept="image/*" onchange="loadImage(event)" hidden="true">
-        <img id="uploadedimage" />
-        <script>
-            var analyzePhoto = function () {
-                var url = '@Url.Action("AnalyzeImage", "Home", new { path = "js-id" })'
-                    .replace("js-id", document.getElementById("inputImage").value);
-                window.location = url;
-            };
 
-            $('#chooseImageBtn').on('click', function () {
-                $('#inputImage').click();
-            });
+        <div>
+            <button id="chooseImageBtn" type="button" class="btn btn-warning">Browse</button>
+            <input placeholder="Image URL" id="imageUrl" type="text" name="imageUrl" onkeyup="imageUrlChange(event)" class="btn text-white alert-dark" />
+            <button id="showImageFromUrlBtn" type="button" class="btn btn-danger" hidden="true">Preview</button>
+        </div><br /><br />
 
-            var loadImage = function (event) {
-                var uploadedimage = document.getElementById('uploadedimage');
-                uploadedimage.src = URL.createObjectURL(event.target.files[0]);
-                // document.getElementById('analyzePhotoBtn').disabled = false;
-                document.getElementById('analyzePhotoBtn').hidden = false;
-                document.getElementById('chooseImageBtn').innerText = 'Change Image';
-            };
-        </script>
+
+        @using (Html.BeginForm("AnalyzeImage", "Image", FormMethod.Post, new { enctype = "multipart/form-data", id = "uploadedImageId" }))
+        {
+            <input id="inputImage" type="file" accept="image/*" onchange="loadImage(event)" hidden="true" name="uploadedImage">
+            <img id="uploadedimage" onerror="uploadImageError(event)" onload="uploadImageSuccess(event)" style="max-height: 350px; max-width: 350px" />
+            <p id="errorUploadImageMessage" class="lead" hidden="true">The uploaded image is not valid.</p>
+        }
+
         <button id="analyzePhotoBtn" onclick="analyzePhoto(); return false;" class="btn btn-primary btn-lg upload-button" hidden="true">Analyze Photo &raquo;</button>
     </div>
     <div class="jumbotron main-divs">
-        
+        <div id='emotionSection' class='table-responsive'></div>
     </div>
 </div>

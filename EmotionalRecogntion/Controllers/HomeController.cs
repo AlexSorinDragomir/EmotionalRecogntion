@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using EmotionalRecogntion.Utils;
 using System.Web.Mvc;
-using System.Web.Optimization;
 
 namespace EmotionalRecogntion.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly string bootstrapCss = "bootstrapCss";
-        private readonly string defaultTheme = "bootstrap-minty";
         public ActionResult Index()
         {
             SetBootstrapCss(ViewBag);
@@ -28,22 +22,13 @@ namespace EmotionalRecogntion.Controllers
 
         private void SetBootstrapCss(dynamic viewBag)
         {
-            string value = defaultTheme;
-            if (Request.Cookies[bootstrapCss] != null)
+            string value = Constants.DefaultTheme;
+            if (Request.Cookies[Constants.BootstrapCss] != null)
             {
-                value = Request.Cookies[bootstrapCss].Value;
+                value = Request.Cookies[Constants.BootstrapCss].Value;
             }
 
             viewBag.BootstrapCss = value;
-        }
-
-        public ActionResult AnalyzeImage(string path)
-        {
-            string processName = @"C:\Users\Alex\source\repos\Emotional Recognition\EmotionalRecogntion\EmotionalRecognitionConsoleApp\EmotionalRecognitionConsoleApp\bin\Debug\EmotionalRecognitionConsoleApp.exe";
-
-            System.Diagnostics.Process.Start(processName, path);
-
-            return null;
         }
 
     }

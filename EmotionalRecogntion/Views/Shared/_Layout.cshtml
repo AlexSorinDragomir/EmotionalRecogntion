@@ -16,7 +16,7 @@
                 @Html.ActionLink("About", "About", "Home", new { @class = "navbar-brand" })
             </div>
             <div>
-                Themes<br />
+                
                 @{
                     List<SelectListItem> listItems = new List<SelectListItem>();
                     var mintyItem = ViewBag.BootstrapCss == "bootstrap-minty" ? new SelectListItem{ Text = "bootstrap-minty", Value = "bootstrap-minty", Selected = true } :
