@@ -6,8 +6,10 @@
 @section Scripts
 {
     <script src="@Url.Content("~/Scripts/Home/Index.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Home/jquery.facedetection.js")" type="text/javascript"></script>
 }
 
+<div id="loaderDiv" class="loader" hidden="true"></div>
 
 <div id="main-div">
     <div class="jumbotron main-divs">
@@ -24,7 +26,10 @@
         @using (Html.BeginForm("AnalyzeImage", "Image", FormMethod.Post, new { enctype = "multipart/form-data", id = "uploadedImageId" }))
         {
             <input id="inputImage" type="file" accept="image/*" onchange="loadImage(event)" hidden="true" name="uploadedImage">
-            <img id="uploadedimage" onerror="uploadImageError(event)" onload="uploadImageSuccess(event)" style="max-height: 350px; max-width: 350px" />
+            <img id="uploadedimage" onerror="uploadImageError(event)" onload="uploadImageSuccess(event)" class="imageDimensions" />
+            @*<canvas id="imageCanvas" class="imageDimensions canvasCls" hidden="true">
+                Your browser does not support the HTML5 canvas tag.
+            </canvas>*@
             <p id="errorUploadImageMessage" class="lead" hidden="true">The uploaded image is not valid.</p>
         }
 
@@ -32,5 +37,6 @@
     </div>
     <div class="jumbotron main-divs">
         <div id='emotionSection' class='table-responsive'></div>
+        <div id='detailsSection'></div>
     </div>
 </div>

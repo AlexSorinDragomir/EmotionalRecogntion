@@ -36,7 +36,7 @@ C:\Users\Alex\source\repos\Emotional Recognition\EmotionalRecogntion\EmotionalRe
 C:\Users\Alex\source\repos\Emotional Recognition\EmotionalRecogntion\EmotionalRecogntion\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\Users\Alex\source\repos\Emotional Recognition\EmotionalRecogntion\EmotionalRecogntion\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\Alex\source\repos\Emotional Recognition\EmotionalRecogntion\EmotionalRecogntion\bin\Microsoft.AI.Web.xml
-C:\Users\Alex\source\repos\Emotional Recognition\EmotionalRecogntion\EmotionalRecogntion\obj\Debug\EmotionalRecogntion.csprojResolveAssemblyReference.cache
 C:\Users\Alex\source\repos\Emotional Recognition\EmotionalRecogntion\EmotionalRecogntion\obj\Debug\EmotionalRecogntion.csproj.CoreCompileInputs.cache
 C:\Users\Alex\source\repos\Emotional Recognition\EmotionalRecogntion\EmotionalRecogntion\obj\Debug\EmotionalRecogntion.dll
 C:\Users\Alex\source\repos\Emotional Recognition\EmotionalRecogntion\EmotionalRecogntion\obj\Debug\EmotionalRecogntion.pdb
+C:\Users\Alex\source\repos\Emotional Recognition\EmotionalRecogntion\EmotionalRecogntion\obj\Debug\EmotionalRecogntion.csprojResolveAssemblyReference.cache

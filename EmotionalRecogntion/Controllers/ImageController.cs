@@ -12,31 +12,63 @@ using EmotionalRecogntion.Utils;
 using System.Web.UI.WebControls;
 using System.Web;
 using System.Net;
+using EmotionalRecogntion.Models;
 
 namespace EmotionalRecogntion.Controllers
 {
     public class ImageController : Controller
     {
+        private static JArray JsonApiResponse { get; set; }
+
+        [HttpGet]
+        public string GetMoreDetails()
+        {
+            try
+            {
+                return "empty";
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult> AnalyzeImage(HttpPostedFileBase uploadedImage)
         {
-            byte[] fileData = null;
-            using (var binaryReader = new BinaryReader(uploadedImage.InputStream))
+            try
             {
-                fileData = binaryReader.ReadBytes(uploadedImage.ContentLength);
+                byte[] fileData = null;
+                using (var binaryReader = new BinaryReader(uploadedImage.InputStream))
+                {
+                    fileData = binaryReader.ReadBytes(uploadedImage.ContentLength);
+                }
+                var emotions = await MakeAnalysisRequest(fileData);
+                return PartialView("~/Views/Image/_EmotionSection.cshtml", emotions);
             }
-            var emotions = await MakeAnalysisRequest(fileData);
-            var model = new Models.EmotionSectionModel(emotions);
-            return PartialView("~/Views/Image/_EmotionSection.cshtml", model);
+            catch (Exception ex)
+            {
+                var emotionModelList = new List<EmotionSectionModel>();
+                emotionModelList.Add(new EmotionSectionModel(ex.ToString()));
+                        return PartialView("~/Views/Image/_EmotionSection.cshtml", emotionModelList);
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult> AnalyzeImageFromUrl(string imageUrlAddress)
         {
-            byte[] fileData = GetImageAsByteArrayFromUrl(imageUrlAddress);
-            var emotions = await MakeAnalysisRequest(fileData);
-            var model = new Models.EmotionSectionModel(emotions);
-            return PartialView("~/Views/Image/_EmotionSection.cshtml", model);
+            try
+            {
+                byte[] fileData = GetImageAsByteArrayFromUrl(imageUrlAddress);
+                var emotions = await MakeAnalysisRequest(fileData);
+                return PartialView("~/Views/Image/_EmotionSection.cshtml", emotions);
+            }
+            catch (Exception ex)
+            {
+                var emotionModelList = new List<EmotionSectionModel>();
+                emotionModelList.Add(new EmotionSectionModel(ex.ToString()));
+                return PartialView("~/Views/Image/_EmotionSection.cshtml", emotionModelList);
+            }
         }
               
         static byte[] GetImageAsByteArrayFromUrl(string imageFilePath)
@@ -50,7 +82,7 @@ namespace EmotionalRecogntion.Controllers
         /// Gets the analysis of the specified image file by using the Computer Vision REST API.
         /// </summary>
         /// <param name="imageFilePath">The image file.</param>
-        static async Task<string> MakeAnalysisRequest(byte[] byteData)
+        static async Task<List<EmotionSectionModel>> MakeAnalysisRequest(byte[] byteData)
         {
             HttpClient client = new HttpClient();
 
@@ -83,6 +115,7 @@ namespace EmotionalRecogntion.Controllers
                 // JSON response.
                 var jsonString = JsonPrettyPrint(contentString);
                 JArray jsonArrayObj = JArray.Parse(contentString);
+                JsonApiResponse = jsonArrayObj;
 
                 var emotions = GetEmotionsFromJsonArray(jsonArrayObj);
                 return emotions;
@@ -102,19 +135,23 @@ namespace EmotionalRecogntion.Controllers
             return binaryReader.ReadBytes((int)fileStream.Length);
         }
 
-        static string GetEmotionsFromJsonArray(JArray jsonArray)
+        static List<EmotionSectionModel> GetEmotionsFromJsonArray(JArray jsonArray)
         {
-            string personsEmotions = "";
+            var emotionSectionModelList = new List<EmotionSectionModel>();
             if (jsonArray.Count() == 0)
             {
-                return "No person detected, plese try to use a better image!";
+                var emotionSectionModel = new EmotionSectionModel("No person detected, plese try to use a better image!");
+                emotionSectionModelList.Add(emotionSectionModel);
+                return emotionSectionModelList;
             }
 
             if (jsonArray.Count() == 1)
             {
-                return "The main emotion seems to be: "
-                    + ComputeMainEmotion(jsonArray.First()[Constants.FaceAttributes][Constants.Emotion]) + "\n"
-                    + jsonArray.First()[Constants.FaceAttributes][Constants.Emotion].ToString();
+                var emotionSectionModel = GetEmotionsModel(jsonArray.First());
+                emotionSectionModel.MainEmotion = "The main emotion seems to be: " + 
+                    ComputeMainEmotion(jsonArray.First()[Constants.FaceAttributes][Constants.Emotion]);
+                emotionSectionModelList.Add(emotionSectionModel);
+                return emotionSectionModelList;
             }
 
             if (jsonArray.Count() > 1)
@@ -122,13 +159,29 @@ namespace EmotionalRecogntion.Controllers
                 int count = 1;
                 foreach (var item in jsonArray.ToList())
                 {
+                    var emotionSectionModel = GetEmotionsModel(item);
                     var mainEmotion = ComputeMainEmotion(item[Constants.FaceAttributes][Constants.Emotion]);
-                    personsEmotions += "Person number " + count++ + " seems to mainly feel " +
-                        mainEmotion + ":\n" + item[Constants.FaceAttributes][Constants.Emotion].ToString() + "\n";
+                    emotionSectionModel.MainEmotion += "Person number " + count++ + " seems to mainly feel " + mainEmotion;
+                    emotionSectionModelList.Add(emotionSectionModel);
                 }
             }
 
-            return personsEmotions;
+            return emotionSectionModelList;
+        }
+
+        private static EmotionSectionModel GetEmotionsModel(JToken json)
+        {
+            var emotionSectionModel = new EmotionSectionModel();
+            var emotionJson = json[Constants.FaceAttributes][Constants.Emotion];
+            emotionSectionModel.Anger = emotionJson[Constants.Anger].ToString();
+            emotionSectionModel.Contempt = emotionJson[Constants.Contempt].ToString();
+            emotionSectionModel.Disgust = emotionJson[Constants.Disgust].ToString();
+            emotionSectionModel.Fear = emotionJson[Constants.Fear].ToString();
+            emotionSectionModel.Happiness = emotionJson[Constants.Happiness].ToString();
+            emotionSectionModel.Neutral = emotionJson[Constants.Neutral].ToString();
+            emotionSectionModel.Sadness = emotionJson[Constants.Sadness].ToString();
+            emotionSectionModel.Surprise = emotionJson[Constants.Surprise].ToString();
+            return emotionSectionModel;
         }
 
         private static string ComputeMainEmotion(JToken item)

@@ -1,3 +1,39 @@
-﻿@model  EmotionalRecogntion.Models.EmotionSectionModel
+﻿@model  List<EmotionalRecogntion.Models.EmotionSectionModel>
 
-<p>@Model.Emotions</p>
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/Home/Index.js")" type="text/javascript"></script>
+}
+
+<h1>Image analysis results</h1>
+
+<div class="emotionSectionDiv">
+    @foreach (var item in @Model)
+    {
+        if (!string.IsNullOrEmpty(@item.Error))
+        {
+            <span>@item.Error</span>
+        }
+        else
+        {
+            <div class="card personEmotionCard">
+                <span>@item.MainEmotion</span>
+                <span>{</span>
+                <table>
+                    <tr class="emotionsGrid">
+                        <td>Anger: @item.Anger</td>
+                        <td>Contempt: @item.Contempt</td>
+                        <td>Disgust: @item.Disgust</td>
+                        <td>Fear: @item.Fear</td>
+                        <td>Happiness: @item.Happiness</td>
+                        <td>Neutral: @item.Neutral</td>
+                        <td>Sadness: @item.Sadness</td>
+                        <td>Surprise: @item.Surprise</td>
+                    </tr>
+                </table>
+                <span>}</span>
+            </div>
+        }
+     }
+    <button id="getMoreInfoAboutPersons" onclick="getMoreInfoAboutPersons(); return false;" class="btn btn-primary btn-lg upload-button" style="margin-bottom: 5px;">Get More Info &raquo;</button>
+</div>
