@@ -7,18 +7,18 @@ namespace EmotionalRecogntion.Models
 {
     public class PersonDetailsModel
     {
-        private string Smile { get; set; }
-        private string Gender { get; set; }
-        private string Age { get; set; }
-        private string Moustache { get; set; }
-        private string Beard { get; set; }
-        private string Sideburns { get; set; }
-        private string glasses { get; set; }
-        private string EyeMakeup { get; set; }
-        private string LipMakeup { get; set; }
-        private List<string> Accessories { get; set; }
-        private List<string> Hair { get; set; }
-        private List<string> HairColor { get; set; }
-        private string Error { get; set; }
+        public string Smile { get; set; }
+        public string Gender { get; set; }
+        public string Age { get; set; }
+        public string Moustache { get; set; }
+        public string Beard { get; set; }
+        public string Sideburns { get; set; }
+        public string Glasses { get; set; }
+        public string EyeMakeup { get; set; }
+        public string LipMakeup { get; set; }
+        public List<AccessoriesModel> Accessories { get; set; }
+        public string Bald { get; set; }
+        public List<HairColorModel> HairColor { get; set; }
+        public string Error { get; set; }
     }
 }

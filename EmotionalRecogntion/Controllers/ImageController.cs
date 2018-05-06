@@ -21,16 +21,55 @@ namespace EmotionalRecogntion.Controllers
         private static JArray JsonApiResponse { get; set; }
 
         [HttpGet]
-        public string GetMoreDetails()
+        public ActionResult GetMoreDetails()
         {
+            var personDetailsModelList = new List<PersonDetailsModel>();
             try
             {
-                return "empty";
+                if (JsonApiResponse.Count() == 1)
+                {
+                    var personDetailsModel = GetPersonDetailsModel(JsonApiResponse.First());
+                    personDetailsModelList.Add(personDetailsModel);
+                    return PartialView("~/Views/Image/_PersonDetailsSection.cshtml", personDetailsModelList);
+                }
+
+                if (JsonApiResponse.Count() > 1)
+                {
+                    foreach (var item in JsonApiResponse.ToList())
+                    {
+                        var emotionSectionModel = GetPersonDetailsModel(item);
+                        personDetailsModelList.Add(emotionSectionModel);
+                    }
+                }
+                return PartialView("~/Views/Image/_PersonDetailsSection.cshtml", personDetailsModelList);
             }
             catch (Exception ex)
             {
-                return ex.ToString();
+                var errorPersonDetailsModel = new PersonDetailsModel();
+                errorPersonDetailsModel.Error = ex.ToString();
+                personDetailsModelList.Add(errorPersonDetailsModel);
+                return PartialView("~/Views/Image/_PersonDetailsSection.cshtml", errorPersonDetailsModel);
             }
+        }
+
+        private PersonDetailsModel GetPersonDetailsModel(JToken json)
+        {
+            var personDetailsModel = new PersonDetailsModel();
+            var faceAttributes = json[Constants.FaceAttributes];
+
+            personDetailsModel.Accessories = faceAttributes[Constants.Accessories].ToObject <List<AccessoriesModel>>();
+            personDetailsModel.Age = faceAttributes[Constants.Age].ToString();
+            personDetailsModel.Beard = faceAttributes[Constants.FacialHair][Constants.Beard].ToString();
+            personDetailsModel.EyeMakeup = faceAttributes[Constants.Makeup][Constants.EyeMakeup].ToString();
+            personDetailsModel.Gender = faceAttributes[Constants.Gender].ToString();
+            personDetailsModel.Glasses = faceAttributes[Constants.Glasses].ToString();
+            personDetailsModel.Bald = faceAttributes[Constants.Hair][Constants.Bald].ToString();
+            personDetailsModel.HairColor = faceAttributes[Constants.Hair][Constants.HairColor].ToObject<List<HairColorModel>>();
+            personDetailsModel.LipMakeup = faceAttributes[Constants.Makeup][Constants.LipMakeup].ToString();
+            personDetailsModel.Moustache = faceAttributes[Constants.FacialHair][Constants.Moustache].ToString();
+            personDetailsModel.Sideburns = faceAttributes[Constants.FacialHair][Constants.Sideburns].ToString();
+            personDetailsModel.Smile = faceAttributes[Constants.Smile].ToString();
+            return personDetailsModel;
         }
 
         [HttpPost]

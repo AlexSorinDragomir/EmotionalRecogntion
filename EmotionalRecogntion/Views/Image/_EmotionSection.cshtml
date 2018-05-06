@@ -12,7 +12,7 @@
     {
         if (!string.IsNullOrEmpty(@item.Error))
         {
-            <span>@item.Error</span>
+            <span style="max-width: 490px">@item.Error</span>
         }
         else
         {
@@ -35,5 +35,8 @@
             </div>
         }
      }
-    <button id="getMoreInfoAboutPersons" onclick="getMoreInfoAboutPersons(); return false;" class="btn btn-primary btn-lg upload-button" style="margin-bottom: 5px;">Get More Info &raquo;</button>
 </div>
+@if (Model.FirstOrDefault(emotion => emotion.Error != null) == null)
+{
+    <button id="getMoreInfoAboutPersonsBtn" onclick="getMoreInfoAboutPersons(); return false;" class="btn btn-primary btn-lg upload-button" style="margin-bottom: 5px;">Get More Info &raquo;</button>
+}

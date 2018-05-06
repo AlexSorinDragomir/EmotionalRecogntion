@@ -16,6 +16,8 @@ namespace EmotionalRecogntion.Utils
         // NOTE: Free trial subscription keys are generated in the westcentralus region, so if you are using
         // a free trial subscription key, you should not need to change this region.
         public const string UriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
+
+        // emotions
         public const string FaceAttributes = "faceAttributes";
         public const string Emotion = "emotion";
         public const string Anger = "anger";
@@ -26,8 +28,32 @@ namespace EmotionalRecogntion.Utils
         public const string Neutral = "neutral";
         public const string Sadness = "sadness";
         public const string Surprise = "surprise";
+
+        // other person details
+        public const string Smile = "smile";
+        public const string Gender = "gender";
+        public const string Age = "age";
+        public const string Moustache = "moustache";
+        public const string Beard = "beard";
+        public const string Sideburns = "sideburns";
+        public const string Glasses = "glasses";
+        public const string EyeMakeup = "eyeMakeup";
+        public const string LipMakeup = "lipMakeup";
+        public const string Accessories = "accessories";
+        public const string Hair = "hair";
+        public const string Bald = "bald";
+        public const string HairColor = "hairColor";
+        public const string FacialHair = "facialHair";
+        public const string Makeup = "makeup";
+        public const string Confidence = "confidence";
+        public const string Type = "type";
+        public const string Color = "color";
+
+        // bootstrap themes
         public const string BootstrapCss = "bootstrapCss";
         public const string DefaultTheme = "bootstrap-minty";
+
+        // subscriptionKey
         public const string SubscriptionKey = "7c0790e2df3d43239dc027790a6700f9";
     }
 }

@@ -99,6 +99,11 @@ textarea {
     display: grid;
 }
 
+.personDetailsGridRows {
+    text-indent: 120px;
+    display: grid;
+}
+
 .emotionSectionDiv {
     overflow-y: scroll;
     height: 400px;

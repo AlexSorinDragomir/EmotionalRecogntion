@@ -1,4 +1,4 @@
-﻿    var config = {
+﻿var config = {
     loaderDivId: 'loaderDiv',
     analyzePhotoBtnId: 'analyzePhotoBtn',
     showImageFromUrlBtnId: 'showImageFromUrlBtn',
@@ -11,8 +11,8 @@
     uploadImageErrorId: 'uploadImageError',
     errorUploadImageMessageId: 'errorUploadImageMessage', 
     imageCanvasId: 'imageCanvas',
-    detailsSectionId: 'detailsSection',
-    getMoreInfoAboutPersonsId: 'getMoreInfoAboutPersons'
+    personDetailsSectionId: 'detailsSection',
+    getMoreInfoAboutPersonsBtnId: 'getMoreInfoAboutPersonsBtn'
 }
 
 var setCanvasDimensions = function () {
@@ -44,6 +44,11 @@ var showLoader = function () {
     document.getElementById(config.showImageFromUrlBtnId).classList.add(config.customDisabledBtnClass);
     document.getElementById(config.chooseImageBtnId).classList.add(config.customDisabledBtnClass);
     document.getElementById(config.imageUrlId).disabled = true;
+    var getMoreInfoAboutPersonsBtn = document.getElementById(config.getMoreInfoAboutPersonsBtnId);
+    if (getMoreInfoAboutPersonsBtn !== null && getMoreInfoAboutPersonsBtn !== undefined) {
+        getMoreInfoAboutPersonsBtn.disabled = true;
+        getMoreInfoAboutPersonsBtn.classList.add(config.customDisabledBtnClass);
+    }
 }
 
 var hideLoader = function () {
@@ -55,6 +60,11 @@ var hideLoader = function () {
     document.getElementById(config.showImageFromUrlBtnId).classList.remove(config.customDisabledBtnClass);
     document.getElementById(config.chooseImageBtnId).classList.remove(config.customDisabledBtnClass);
     document.getElementById(config.imageUrlId).disabled = false;
+    var getMoreInfoAboutPersonsBtn = document.getElementById(config.getMoreInfoAboutPersonsBtnId);
+    if (getMoreInfoAboutPersonsBtn !== null && getMoreInfoAboutPersonsBtn !== undefined) {
+        getMoreInfoAboutPersonsBtn.disabled = false;
+        getMoreInfoAboutPersonsBtn.classList.remove(config.customDisabledBtnClass);
+    }
 }
 
 var analyzePhoto = function () {
@@ -77,7 +87,7 @@ var analyzePhoto = function () {
                 hideLoader();
             },
             error: function (e) {
-                document.getElementById(config.emotionSectionId).innerHTML = e;
+                document.getElementById(config.emotionSectionId).innerHTML = e.pr;
                 document.getElementById(config.emotionSectionId).hidden = false;
                 console.log(e);
                 hideLoader();
@@ -125,6 +135,7 @@ $('#' + config.showImageFromUrlBtnId).on('click', function () {
     var imageUrl = document.getElementById(config.imageUrlId).value;
     $("#" + config.uploadedimageId).attr("src", imageUrl);
     document.getElementById(config.emotionSectionId).hidden = true;
+    document.getElementById(config.personDetailsSectionId).hidden = true;
     // setCanvasDimensions();
 });
 
@@ -147,23 +158,24 @@ var loadImage = function (event) {
     uploadedimage.src = URL.createObjectURL(event.target.files[0]);
     document.getElementById(config.imageUrlId).value = "";
     document.getElementById(config.showImageFromUrlBtnId).hidden = true;
-    document.getElementById(config.emotionSectionId).hidden = true;
+    document.getElementById(config.emotionSectionId).hidden = true; 
+    document.getElementById(config.personDetailsSectionId).hidden = true;
     // setCanvasDimensions();
 };
 
 var getMoreInfoAboutPersons = function () {
+    showLoader();
     $.ajax({
         url: "/Image/GetMoreDetails",
         type: 'GET',
         success: function (result) {
-            document.getElementById(config.detailsSectionId).innerHTML = result;
-            document.getElementById(config.detailsSectionId).hidden = false;
-            document.getElementById(config.getMoreInfoAboutPersons).disabled = true;
+            document.getElementById(config.personDetailsSectionId).innerHTML = result;
+            document.getElementById(config.personDetailsSectionId).hidden = false;  
             hideLoader();
         },
         error: function (e) {
-            document.getElementById(config.detailsSectionId).innerHTML = e;
-            document.getElementById(config.detailsSectionId).hidden = false;
+            document.getElementById(config.personDetailsSectionId).innerHTML = e;
+            document.getElementById(config.personDetailsSectionId).hidden = false;
             console.log(e);
             hideLoader();
         }
