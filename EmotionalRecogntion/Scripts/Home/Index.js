@@ -15,10 +15,21 @@
     getMoreInfoAboutPersonsBtnId: 'getMoreInfoAboutPersonsBtn',
     openWebcamBtnId: 'openWebcamBtn',
     videoId: 'video',
-    stopWebcamBtnId: 'stopWebcamBtn'
+    stopWebcamBtnId: 'stopWebcamBtn',
+    takeSnapshotBtnId: "takeSnapshotBtn"
 }
 
 var blob;
+
+var showWebcamRelatedButtons = function () {
+    document.getElementById(config.takeSnapshotBtnId).hidden = false;
+    document.getElementById(config.stopWebcamBtnId).hidden = false
+}
+
+var hideWebcamRelatedButtons = function () {
+    document.getElementById(config.takeSnapshotBtnId).hidden = true;
+    document.getElementById(config.stopWebcamBtnId).hidden = true
+}
 
 var setCanvasDimensions = function () {
     var uploadedImage = document.getElementById(config.uploadedimageId);
@@ -202,6 +213,8 @@ $('#' + config.openWebcamBtnId).on('click', function () {
         navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
             function (stream) {
                 var video = document.querySelector(config.videoId);
+                showWebcamRelatedButtons();
+                video.hidden = false;
                 video.srcObject = stream;
                 video.onloadedmetadata = function (e) {
                     video.play();
@@ -209,15 +222,21 @@ $('#' + config.openWebcamBtnId).on('click', function () {
             },
             function (err) {
                 console.log("The following error occurred: " + err.name);
+                showSnackBar("Error while opening Webcam!");
+                hideWebcamRelatedButtons();
             }
         );
     } else {
         console.log("getUserMedia not supported");
+        showSnackBar("getUserMedia not supported by your browser!");
+        hideWebcamRelatedButtons();
     }
 });
 
 var closeWebcam = function () {
     var videoElem = document.getElementById(config.videoId);
+    videoElem.hidden = true;
+    hideWebcamRelatedButtons();
     let stream = videoElem.srcObject;
     let tracks = stream.getTracks();
 

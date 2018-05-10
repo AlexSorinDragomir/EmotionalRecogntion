@@ -21,10 +21,11 @@
             <input placeholder="Image URL" id="imageUrl" type="text" name="imageUrl" onkeyup="imageUrlChange(event)" class="btn text-white alert-dark" />
             <button id="showImageFromUrlBtn" type="button" class="btn btn-danger" hidden="true">Preview</button>
         </div>
-        <video id="video"></video>
+        <video id="video" hidden="true"></video>
+        <br />
         <button id="openWebcamBtn" type="button" class="btn btn-warning">Webcam</button>
-        <button onclick="snapshot();" type="button" class="btn btn-warning">Take Snapshot</button> 
-        <button id="stopWebcamBtn" onclick="closeWebcam();" type="button" class="btn btn-warning">Stop Webcam</button>
+        <button id="takeSnapshotBtn" onclick="snapshot();" type="button" class="btn btn-warning" hidden="true">Take Snapshot</button> 
+        <button id="stopWebcamBtn" onclick="closeWebcam();" type="button" class="btn btn-warning" hidden="true">Stop Webcam</button>
         <br /><br />
 
 
