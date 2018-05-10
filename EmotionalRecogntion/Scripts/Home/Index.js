@@ -12,8 +12,13 @@
     errorUploadImageMessageId: 'errorUploadImageMessage', 
     imageCanvasId: 'imageCanvas',
     personDetailsSectionId: 'detailsSection',
-    getMoreInfoAboutPersonsBtnId: 'getMoreInfoAboutPersonsBtn'
+    getMoreInfoAboutPersonsBtnId: 'getMoreInfoAboutPersonsBtn',
+    openWebcamBtnId: 'openWebcamBtn',
+    videoId: 'video',
+    stopWebcamBtnId: 'stopWebcamBtn'
 }
+
+var blob;
 
 var setCanvasDimensions = function () {
     var uploadedImage = document.getElementById(config.uploadedimageId);
@@ -72,6 +77,10 @@ var analyzePhoto = function () {
     var imageUrlAddress = document.getElementById(config.imageUrlId).value;
     if (imageUrlAddress == "") {
         var file = document.getElementById(config.inputImageId).files[0];
+        console.log(document.getElementById(config.inputImageId));
+        console.log(file);
+        if (blob !== null && blob !== undefined)
+            file = blob;
         var formData = new FormData();
         formData.append("uploadedImage", file);
         $.ajax({
@@ -136,6 +145,7 @@ $('#' + config.showImageFromUrlBtnId).on('click', function () {
     $("#" + config.uploadedimageId).attr("src", imageUrl);
     document.getElementById(config.emotionSectionId).hidden = true;
     document.getElementById(config.personDetailsSectionId).hidden = true;
+    blob = null;
     // setCanvasDimensions();
 });
 
@@ -160,6 +170,7 @@ var loadImage = function (event) {
     document.getElementById(config.showImageFromUrlBtnId).hidden = true;
     document.getElementById(config.emotionSectionId).hidden = true; 
     document.getElementById(config.personDetailsSectionId).hidden = true;
+    blob = null;
     // setCanvasDimensions();
 };
 
@@ -180,4 +191,97 @@ var getMoreInfoAboutPersons = function () {
             hideLoader();
         }
     });
+}
+
+$('#' + config.openWebcamBtnId).on('click', function () {
+    navigator.getUserMedia = navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia;
+
+    if (navigator.getUserMedia) {
+        navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
+            function (stream) {
+                var video = document.querySelector(config.videoId);
+                video.srcObject = stream;
+                video.onloadedmetadata = function (e) {
+                    video.play();
+                };
+            },
+            function (err) {
+                console.log("The following error occurred: " + err.name);
+            }
+        );
+    } else {
+        console.log("getUserMedia not supported");
+    }
+});
+
+var closeWebcam = function () {
+    var videoElem = document.getElementById(config.videoId);
+    let stream = videoElem.srcObject;
+    let tracks = stream.getTracks();
+
+    tracks.forEach(function (track) {
+        track.stop();
+    });
+
+    videoElem.srcObject = null;
+};
+
+var snapshot = function () {
+    var videoElem = document.getElementById(config.videoId);
+    let stream = videoElem.srcObject;
+    let track = stream.getVideoTracks()[0];
+    let imageCapture = new ImageCapture(track);
+    showSnackBar("Successfully captured image!")
+    console.log(imageCapture);
+    //document.getElementById(config.inputImageId).src = imageCapture;
+    //document.getElementById(config.uploadedimageId).src = document.getElementById(config.inputImageId).src
+
+    var scale = 0.7;
+    var canvas = document.createElement("canvas");
+    canvas.width = videoElem.videoWidth * scale;
+    canvas.height = videoElem.videoHeight * scale;
+    canvas.getContext('2d')
+        .drawImage(videoElem, 0, 0, canvas.width, canvas.height);
+
+    var input = document.getElementById(config.inputImageId);
+    console.log(canvas);
+    console.log(canvas.toDataURL());
+    input.src = canvas.toDataURL();
+    var img = document.getElementById(config.uploadedimageId);
+    img.src = input.src;
+    //img.width = "450px";
+    //img.height = "450px";
+    img.hidden = false;
+
+    blob = dataURItoBlob(img.src);
+    console.log(blob);
+}
+
+var showSnackBar = function (message) {
+    var x = document.getElementById("snackbar");
+    x.innerHTML = message;
+    x.className = "show";
+    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+}
+
+var dataURItoBlob = function (dataURI) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+    else
+        byteString = unescape(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], { type: mimeString });
 }

@@ -20,12 +20,17 @@
             <button id="chooseImageBtn" type="button" class="btn btn-warning">Browse</button>
             <input placeholder="Image URL" id="imageUrl" type="text" name="imageUrl" onkeyup="imageUrlChange(event)" class="btn text-white alert-dark" />
             <button id="showImageFromUrlBtn" type="button" class="btn btn-danger" hidden="true">Preview</button>
-        </div><br /><br />
+        </div>
+        <video id="video"></video>
+        <button id="openWebcamBtn" type="button" class="btn btn-warning">Webcam</button>
+        <button onclick="snapshot();" type="button" class="btn btn-warning">Take Snapshot</button> 
+        <button id="stopWebcamBtn" onclick="closeWebcam();" type="button" class="btn btn-warning">Stop Webcam</button>
+        <br /><br />
 
 
         @using (Html.BeginForm("AnalyzeImage", "Image", FormMethod.Post, new { enctype = "multipart/form-data", id = "uploadedImageId" }))
         {
-            <input id="inputImage" type="file" accept="image/*" onchange="loadImage(event)" hidden="true" name="uploadedImage">
+            <input id="inputImage" type="file" accept="image/*;capture=camera" onchange="loadImage(event)" hidden="true" name="uploadedImage">
             <img id="uploadedimage" onerror="uploadImageError(event)" onload="uploadImageSuccess(event)" class="imageDimensions" />
             @*<canvas id="imageCanvas" class="imageDimensions canvasCls" hidden="true">
                 Your browser does not support the HTML5 canvas tag.
@@ -40,3 +45,5 @@
         <div id='detailsSection'></div>
     </div>
 </div>
+
+<div id="snackbar"></div>
