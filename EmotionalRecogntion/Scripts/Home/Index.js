@@ -65,6 +65,12 @@ var showLoader = function () {
         getMoreInfoAboutPersonsBtn.disabled = true;
         getMoreInfoAboutPersonsBtn.classList.add(config.customDisabledBtnClass);
     }
+    document.getElementById(config.takeSnapshotBtnId).disabled = true;
+    document.getElementById(config.takeSnapshotBtnId).classList.add(config.customDisabledBtnClass);
+    document.getElementById(config.openWebcamBtnId).disabled = true;
+    document.getElementById(config.openWebcamBtnId).classList.add(config.customDisabledBtnClass);
+    document.getElementById(config.stopWebcamBtnId).disabled = true;
+    document.getElementById(config.stopWebcamBtnId).classList.add(config.customDisabledBtnClass);
 }
 
 var hideLoader = function () {
@@ -81,6 +87,12 @@ var hideLoader = function () {
         getMoreInfoAboutPersonsBtn.disabled = false;
         getMoreInfoAboutPersonsBtn.classList.remove(config.customDisabledBtnClass);
     }
+    document.getElementById(config.takeSnapshotBtnId).disabled = false;
+    document.getElementById(config.takeSnapshotBtnId).classList.remove(config.customDisabledBtnClass);
+    document.getElementById(config.openWebcamBtnId).disabled = false;
+    document.getElementById(config.openWebcamBtnId).classList.remove(config.customDisabledBtnClass);
+    document.getElementById(config.stopWebcamBtnId).disabled = false;
+    document.getElementById(config.stopWebcamBtnId).classList.remove(config.customDisabledBtnClass);
 }
 
 var analyzePhoto = function () {
@@ -88,8 +100,6 @@ var analyzePhoto = function () {
     var imageUrlAddress = document.getElementById(config.imageUrlId).value;
     if (imageUrlAddress == "") {
         var file = document.getElementById(config.inputImageId).files[0];
-        console.log(document.getElementById(config.inputImageId));
-        console.log(file);
         if (blob !== null && blob !== undefined)
             file = blob;
         var formData = new FormData();
@@ -253,9 +263,6 @@ var snapshot = function () {
     let track = stream.getVideoTracks()[0];
     let imageCapture = new ImageCapture(track);
     showSnackBar("Successfully captured image!")
-    console.log(imageCapture);
-    //document.getElementById(config.inputImageId).src = imageCapture;
-    //document.getElementById(config.uploadedimageId).src = document.getElementById(config.inputImageId).src
 
     var scale = 0.7;
     var canvas = document.createElement("canvas");
@@ -265,17 +272,12 @@ var snapshot = function () {
         .drawImage(videoElem, 0, 0, canvas.width, canvas.height);
 
     var input = document.getElementById(config.inputImageId);
-    console.log(canvas);
-    console.log(canvas.toDataURL());
     input.src = canvas.toDataURL();
     var img = document.getElementById(config.uploadedimageId);
     img.src = input.src;
-    //img.width = "450px";
-    //img.height = "450px";
     img.hidden = false;
 
     blob = dataURItoBlob(img.src);
-    console.log(blob);
 }
 
 var showSnackBar = function (message) {
