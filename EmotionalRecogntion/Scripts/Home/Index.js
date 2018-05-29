@@ -24,31 +24,13 @@ var blob;
 var showWebcamRelatedButtons = function () {
     document.getElementById(config.takeSnapshotBtnId).hidden = false;
     document.getElementById(config.stopWebcamBtnId).hidden = false
+    document.getElementById(config.openWebcamBtnId).hidden = true;
 }
 
 var hideWebcamRelatedButtons = function () {
     document.getElementById(config.takeSnapshotBtnId).hidden = true;
     document.getElementById(config.stopWebcamBtnId).hidden = true
-}
-
-var setCanvasDimensions = function () {
-    var uploadedImage = document.getElementById(config.uploadedimageId);
-    var canvas = document.getElementById(config.imageCanvasId);
-    var ctx = canvas.getContext("2d");
-    canvas.style.bottom = uploadedImage.height + "px";
-    ctx.canvas.width = uploadedImage.width;
-    ctx.canvas.height = uploadedImage.height;
-    //ctx.rect(150, 75, 74, 74);
-    ctx.rect(121, 35, 21, 21);
-    ctx.stroke();
-    document.getElementById(config.uploadedimageId).style.height = uploadedImage.height + "px !important";
-    canvas.hidden = false;
-
-    //$('#' + config.uploadedimageId).faceDetection({
-    //    complete: function (faces) {
-    //        console.log(faces);
-    //    }
-    //});
+    document.getElementById(config.openWebcamBtnId).hidden = false;
 }
 
 var showLoader = function () {
@@ -108,10 +90,10 @@ var analyzePhoto = function () {
             url: "/Image/AnalyzeImage",
             type: 'POST',
             data: formData,
-            //dataType: 'json',
             contentType: false,
             processData: false,
             success: function (result) {
+                getDetectedFacesPositions();
                 document.getElementById(config.emotionSectionId).innerHTML = result;
                 document.getElementById(config.emotionSectionId).hidden = false;
                 hideLoader();
@@ -130,6 +112,7 @@ var analyzePhoto = function () {
             type: 'POST',
             data: { imageUrlAddress },
             success: function (result) {
+                getDetectedFacesPositions();
                 document.getElementById(config.emotionSectionId).innerHTML = result;
                 document.getElementById(config.emotionSectionId).hidden = false;
                 hideLoader();
@@ -152,7 +135,6 @@ var uploadImageError = function (event) {
     console.log(config.uploadImageErrorId);
     document.getElementById(config.errorUploadImageMessageId).hidden = false;
     document.getElementById(config.analyzePhotoBtnId).hidden = true;
-    // document.getElementById(config.imageCanvasId).hidden = true;
 };
 
 var uploadImageSuccess = function (event) {
@@ -167,7 +149,7 @@ $('#' + config.showImageFromUrlBtnId).on('click', function () {
     document.getElementById(config.emotionSectionId).hidden = true;
     document.getElementById(config.personDetailsSectionId).hidden = true;
     blob = null;
-    // setCanvasDimensions();
+    document.getElementById(config.imageCanvasId).hidden = true;
 });
 
 var imageUrlChange = function (event) {
@@ -177,6 +159,7 @@ var imageUrlChange = function (event) {
         previewBtn.hidden = false;
         if (event.keyCode == 13) {
             previewBtn.click();
+            document.getElementById(config.imageCanvasId).hidden = true;
         }
     }
     else {
@@ -191,8 +174,8 @@ var loadImage = function (event) {
     document.getElementById(config.showImageFromUrlBtnId).hidden = true;
     document.getElementById(config.emotionSectionId).hidden = true; 
     document.getElementById(config.personDetailsSectionId).hidden = true;
+    document.getElementById(config.imageCanvasId).hidden = true;
     blob = null;
-    // setCanvasDimensions();
 };
 
 var getMoreInfoAboutPersons = function () {
@@ -212,6 +195,49 @@ var getMoreInfoAboutPersons = function () {
             hideLoader();
         }
     });
+}
+
+var getDetectedFacesPositions = function () {
+    $.ajax({
+        url: "/Image/GetDetectedFacesPositions",
+        type: 'GET',
+        success: function (result) {
+            var array = JSON.parse(result);
+            surroundFaces(array);
+        },
+        error: function (e) {
+            console.log(e);
+            showSnackBar("Failed to detect faces in image!");
+        }
+    });
+}
+
+var surroundFaces = function (facesArr) {
+    var uploadedImage = document.getElementById(config.uploadedimageId);
+    var imageOriginalWidth = uploadedImage.naturalWidth;
+    var imageOriginalHeight = uploadedImage.naturalHeight;
+
+    var widthScale = imageOriginalWidth / uploadedImage.width;
+    var heightScale = imageOriginalHeight / uploadedImage.height;
+
+    var canvas = document.getElementById(config.imageCanvasId);
+    var ctx = canvas.getContext("2d");
+    canvas.style.bottom = uploadedImage.height + "px";
+    ctx.canvas.width = uploadedImage.width;
+    ctx.canvas.height = uploadedImage.height;
+    
+    for (var index in facesArr) {
+        var top = parseInt(facesArr[index].Top / heightScale);
+        var left = parseInt(facesArr[index].Left / widthScale);
+        var width = parseInt(facesArr[index].Width / widthScale);
+        var height = parseInt(facesArr[index].Height / heightScale);
+        ctx.rect(left, top, width, height);
+    }
+
+    ctx.strokeStyle = "#FF0000";
+    ctx.stroke();
+    document.getElementById(config.uploadedimageId).style.height = uploadedImage.height + "px !important";
+    canvas.hidden = false;
 }
 
 $('#' + config.openWebcamBtnId).on('click', function () {
@@ -258,26 +284,35 @@ var closeWebcam = function () {
 };
 
 var snapshot = function () {
-    var videoElem = document.getElementById(config.videoId);
-    let stream = videoElem.srcObject;
-    let track = stream.getVideoTracks()[0];
-    let imageCapture = new ImageCapture(track);
-    showSnackBar("Successfully captured image!")
+    try {
+        var videoElem = document.getElementById(config.videoId);
+        let stream = videoElem.srcObject;
+        let track = stream.getVideoTracks()[0];
+        let imageCapture = new ImageCapture(track);
+        document.getElementById(config.emotionSectionId).hidden = true;
+        document.getElementById(config.personDetailsSectionId).hidden = true;
+        showSnackBar("Successfully captured image!")
 
-    var scale = 0.7;
-    var canvas = document.createElement("canvas");
-    canvas.width = videoElem.videoWidth * scale;
-    canvas.height = videoElem.videoHeight * scale;
-    canvas.getContext('2d')
-        .drawImage(videoElem, 0, 0, canvas.width, canvas.height);
+        var scale = 0.7;
+        var canvas = document.createElement("canvas");
+        canvas.width = videoElem.videoWidth * scale;
+        canvas.height = videoElem.videoHeight * scale;
+        canvas.getContext('2d')
+            .drawImage(videoElem, 0, 0, canvas.width, canvas.height);
 
-    var input = document.getElementById(config.inputImageId);
-    input.src = canvas.toDataURL();
-    var img = document.getElementById(config.uploadedimageId);
-    img.src = input.src;
-    img.hidden = false;
+        var input = document.getElementById(config.inputImageId);
+        input.src = canvas.toDataURL();
 
-    blob = dataURItoBlob(img.src);
+        document.getElementById(config.imageCanvasId).hidden = true;
+        var img = document.getElementById(config.uploadedimageId);
+        img.src = input.src;
+        img.hidden = false;
+
+        blob = dataURItoBlob(img.src);
+    }
+    catch (err) {
+        showSnackBar(err);
+    }
 }
 
 var showSnackBar = function (message) {

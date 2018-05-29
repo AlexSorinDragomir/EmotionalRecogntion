@@ -7,6 +7,8 @@
 {
     <script src="@Url.Content("~/Scripts/Home/Index.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/Home/jquery.facedetection.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Home/tracking.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Home/face.js")" type="text/javascript"></script>
 }
 
 <div id="loaderDiv" class="loader" hidden="true"></div>
@@ -21,7 +23,7 @@
             <input placeholder="Image URL" id="imageUrl" type="text" name="imageUrl" onkeyup="imageUrlChange(event)" class="btn text-white alert-dark" />
             <button id="showImageFromUrlBtn" type="button" class="btn btn-danger" hidden="true">Preview</button>
         </div>
-        <video id="video" hidden="true"></video>
+        <video id="video" hidden="true" style="margin-top: 10px"></video>
         <br />
         <button id="openWebcamBtn" type="button" class="btn btn-warning"><span class="glyphicon-camera"></span>Webcam</button>
         <button id="takeSnapshotBtn" onclick="snapshot();" type="button" class="btn btn-warning" hidden="true">Take Snapshot</button> 
@@ -33,9 +35,9 @@
         {
             <input id="inputImage" type="file" accept="image/*;capture=camera" onchange="loadImage(event)" hidden="true" name="uploadedImage">
             <img id="uploadedimage" onerror="uploadImageError(event)" onload="uploadImageSuccess(event)" class="imageDimensions" />
-            @*<canvas id="imageCanvas" class="imageDimensions canvasCls" hidden="true">
+            <canvas id="imageCanvas" class="imageDimensions canvasCls" hidden="true">
                 Your browser does not support the HTML5 canvas tag.
-            </canvas>*@
+            </canvas>
             <p id="errorUploadImageMessage" class="lead" hidden="true">The uploaded image is not valid.</p>
         }
 

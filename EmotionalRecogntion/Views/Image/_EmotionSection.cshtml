@@ -12,11 +12,18 @@
     {
         if (!string.IsNullOrEmpty(@item.Error))
         {
-            <span style="max-width: 490px">@item.Error</span>
+            <div class="card">
+                <span style="max-width: 490px">@item.Error</span>
+            </div>
         }
         else
         {
             <div class="card personEmotionCard">
+                @if (Model.IndexOf(item) == 0)
+                {
+                    <span>Detection result:</span>
+                    <span>@Model.Count faces detected</span>
+                }
                 <span>@item.MainEmotion</span>
                 <span>{</span>
                 <table>

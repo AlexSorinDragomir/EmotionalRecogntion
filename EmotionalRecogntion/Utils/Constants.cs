@@ -30,6 +30,11 @@ namespace EmotionalRecogntion.Utils
         public const string Surprise = "surprise";
 
         // other person details
+        public const string FaceRectangle = "faceRectangle";
+        public const string Top = "top";
+        public const string Left = "left";
+        public const string Width = "width";
+        public const string Height = "height";
         public const string Smile = "smile";
         public const string Gender = "gender";
         public const string Age = "age";
@@ -54,6 +59,7 @@ namespace EmotionalRecogntion.Utils
         public const string DefaultTheme = "bootstrap-minty";
 
         // subscriptionKey
-        public const string SubscriptionKey = "7c0790e2df3d43239dc027790a6700f9";
+        //public const string SubscriptionKey = "7c0790e2df3d43239dc027790a6700f9";
+        public const string SubscriptionKey = "feec5f5a37204b6d8bfe73e488c18afe";
     }
 }

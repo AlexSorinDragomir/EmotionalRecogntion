@@ -13,12 +13,33 @@ using System.Web.UI.WebControls;
 using System.Web;
 using System.Net;
 using EmotionalRecogntion.Models;
+using Newtonsoft.Json;
 
 namespace EmotionalRecogntion.Controllers
 {
     public class ImageController : Controller
     {
         private static JArray JsonApiResponse { get; set; }
+
+        [HttpGet]
+        public string GetDetectedFacesPositions()
+        {
+            var facesList = new List<FacePosition>();
+            foreach (var item in JsonApiResponse.ToList())
+            {
+                var faceRectangle = item[Constants.FaceRectangle];
+                var facePosition = new FacePosition()
+                {
+                    Top = (int)faceRectangle[Constants.Top],
+                    Left = (int)faceRectangle[Constants.Left],
+                    Width = (int)faceRectangle[Constants.Width],
+                    Height = (int)faceRectangle[Constants.Height]
+                };
+                facesList.Add(facePosition);
+            }
+
+            return JsonConvert.SerializeObject(facesList); ;
+        }
 
         [HttpGet]
         public ActionResult GetMoreDetails()
