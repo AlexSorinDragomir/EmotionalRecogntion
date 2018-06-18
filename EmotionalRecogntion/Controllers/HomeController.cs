@@ -14,7 +14,7 @@ namespace EmotionalRecogntion.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Emotion Recognition in Images";
             SetBootstrapCss(ViewBag);
 
             return View();
