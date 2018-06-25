@@ -22,7 +22,14 @@
                 @if (Model.IndexOf(item) == 0)
                 {
                     <span>Detection result:</span>
-                    <span>@Model.Count faces detected</span>
+                    if (Model.Count > 1)
+                    {
+                        <span>@Model.Count faces detected</span>
+                    }
+                    else
+                    {
+                        <span>@Model.Count face detected</span>
+                    }
                 }
                 <span>@item.MainEmotion</span>
                 <span>{</span>
