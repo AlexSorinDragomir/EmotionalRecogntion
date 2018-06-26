@@ -170,8 +170,7 @@ var imageUrlChange = function (event) {
 var loadImage = function (event) {
     var uploadedimage = document.getElementById(config.uploadedimageId);
     uploadedimage.src = URL.createObjectURL(event.target.files[0]);
-    document.getElementById(config.imageUrlId).value = "";
-    document.getElementById(config.showImageFromUrlBtnId).hidden = true;
+    hideImageFromUrlElements();
     document.getElementById(config.emotionSectionId).hidden = true; 
     document.getElementById(config.personDetailsSectionId).hidden = true;
     document.getElementById(config.imageCanvasId).hidden = true;
@@ -283,6 +282,11 @@ var closeWebcam = function () {
     videoElem.srcObject = null;
 };
 
+var hideImageFromUrlElements = function () {
+    document.getElementById(config.imageUrlId).value = "";
+    document.getElementById(config.showImageFromUrlBtnId).hidden = true;
+};
+
 var snapshot = function () {
     try {
         var videoElem = document.getElementById(config.videoId);
@@ -291,7 +295,8 @@ var snapshot = function () {
         let imageCapture = new ImageCapture(track);
         document.getElementById(config.emotionSectionId).hidden = true;
         document.getElementById(config.personDetailsSectionId).hidden = true;
-        showSnackBar("Successfully captured image!")
+        showSnackBar("Successfully captured image!");
+        hideImageFromUrlElements();
 
         var scale = 0.7;
         var canvas = document.createElement("canvas");
@@ -307,7 +312,7 @@ var snapshot = function () {
         var img = document.getElementById(config.uploadedimageId);
         img.src = input.src;
         img.hidden = false;
-
+        
         blob = dataURItoBlob(img.src);
     }
     catch (err) {
