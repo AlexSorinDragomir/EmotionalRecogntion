@@ -38,7 +38,7 @@ namespace EmotionalRecogntion.Controllers
                 facesList.Add(facePosition);
             }
 
-            return JsonConvert.SerializeObject(facesList); ;
+            return JsonConvert.SerializeObject(facesList); 
         }
 
         [HttpGet]
@@ -200,7 +200,7 @@ namespace EmotionalRecogntion.Controllers
             var emotionSectionModelList = new List<EmotionSectionModel>();
             if (jsonArray.Count() == 0)
             {
-                var emotionSectionModel = new EmotionSectionModel("No person detected, plese try to use a better image!");
+                var emotionSectionModel = new EmotionSectionModel("No person detected, please try to use a better image!");
                 emotionSectionModelList.Add(emotionSectionModel);
                 return emotionSectionModelList;
             }

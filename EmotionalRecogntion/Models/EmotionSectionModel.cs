@@ -7,20 +7,6 @@ namespace EmotionalRecogntion.Models
 {
     public class EmotionSectionModel
     {
-        public EmotionSectionModel(string mainEmotion, string anger, string contempt, string disgust, 
-            string fear, string happiness, string neutral, string sadness, string surprise)
-        {
-            MainEmotion = mainEmotion;
-            Anger = anger;
-            Contempt = contempt;
-            Disgust = disgust;
-            Fear = fear;
-            Happiness = happiness;
-            Neutral = neutral;
-            Sadness = sadness;
-            Surprise = surprise;
-        }
-
         public EmotionSectionModel (string error)
         {
             Error = error;
