@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    @Scripts.Render("~/bundles/jquery")
+}
+
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/Home/Index.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Home/jquery.facedetection.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Home/tracking.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Home/face.js")" type="text/javascript"></script>
+}
+
+<div id="loaderDiv" class="loader" hidden="true"></div>
+
+<div id="main-div">
+    <div class="jumbotron main-divs">
+        <h1>Select Photo</h1>
+        <p class="lead">Upload a photo in order to analyze it.</p>
+
+        <div>
+            <button id="chooseImageBtn" type="button" class="btn btn-warning">Browse</button>
+            <input placeholder="Image URL" id="imageUrl" type="text" name="imageUrl" onkeyup="imageUrlChange(event)" class="btn text-white alert-dark" />
+            <button id="showImageFromUrlBtn" type="button" class="btn btn-danger" hidden="true">Preview</button>
+        </div>
+        <video id="video" hidden="true" style="margin-top: 10px"></video>
+        <br />
+        <button id="openWebcamBtn" type="button" class="btn btn-warning"><span class="glyphicon-camera"></span>Webcam</button>
+        <button id="takeSnapshotBtn" onclick="snapshot();" type="button" class="btn btn-warning" hidden="true">Take Snapshot</button> 
+        <button id="stopWebcamBtn" onclick="closeWebcam();" type="button" class="btn btn-warning" hidden="true">Stop Webcam</button>
+        <br /><br />
+
+
+        @using (Html.BeginForm("AnalyzeImage", "Image", FormMethod.Post, new { enctype = "multipart/form-data", id = "uploadedImageId" }))
+        {
+            <input id="inputImage" type="file" accept="image/*;capture=camera" onchange="loadImage(event)" hidden="true" name="uploadedImage">
+            <img id="uploadedimage" onerror="uploadImageError(event)" onload="uploadImageSuccess(event)" class="imageDimensions" />
+            <canvas id="imageCanvas" class="imageDimensions canvasCls" hidden="true">
+                Your browser does not support the HTML5 canvas tag.
+            </canvas>
+            <p id="errorUploadImageMessage" class="lead" hidden="true">The uploaded image is not valid.</p>
+        }
+
+        <button id="analyzePhotoBtn" onclick="analyzePhoto(); return false;" class="btn btn-primary btn-lg upload-button" hidden="true">Analyze Photo &raquo;</button>
+    </div>
+    <div class="jumbotron main-divs">
+        <div id='emotionSection' class='table-responsive'></div>
+        <div id='detailsSection'></div>
+    </div>
+</div>
+
+<div id="snackbar"></div>

@@ -1,0 +1,56 @@
+﻿@model  List<EmotionalRecogntion.Models.EmotionSectionModel>
+
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/Home/Index.js")" type="text/javascript"></script>
+}
+
+<h1>Image analysis results</h1>
+
+<div class="emotionSectionDiv">
+    @foreach (var item in @Model)
+    {
+        if (!string.IsNullOrEmpty(@item.Error))
+        {
+            <div class="card personEmotionCard">
+                <span style="max-width: 490px">@item.Error</span>
+            </div>
+        }
+        else
+        {
+            <div class="card personEmotionCard">
+                @if (Model.IndexOf(item) == 0)
+                {
+                    <span>Detection result:</span>
+                    if (Model.Count > 1)
+                    {
+                        <span>@Model.Count faces detected</span>
+                    }
+                    else
+                    {
+                        <span>@Model.Count face detected</span>
+                    }
+                }
+                <span>@item.MainEmotion</span>
+                <span>{</span>
+                <table>
+                    <tr class="emotionsGrid">
+                        <td>Anger: @item.Anger</td>
+                        <td>Contempt: @item.Contempt</td>
+                        <td>Disgust: @item.Disgust</td>
+                        <td>Fear: @item.Fear</td>
+                        <td>Happiness: @item.Happiness</td>
+                        <td>Neutral: @item.Neutral</td>
+                        <td>Sadness: @item.Sadness</td>
+                        <td>Surprise: @item.Surprise</td>
+                    </tr>
+                </table>
+                <span>}</span>
+            </div>
+        }
+     }
+</div>
+@if (Model.FirstOrDefault(emotion => emotion.Error != null) == null)
+{
+    <button id="getMoreInfoAboutPersonsBtn" onclick="getMoreInfoAboutPersons(); return false;" class="btn btn-primary btn-lg upload-button" style="margin-bottom: 5px;">Get More Info &raquo;</button>
+}

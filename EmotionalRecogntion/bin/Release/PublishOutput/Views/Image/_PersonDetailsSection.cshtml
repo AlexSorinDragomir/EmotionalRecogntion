@@ -1,0 +1,71 @@
+﻿@model  List<EmotionalRecogntion.Models.PersonDetailsModel>
+
+@section Scripts
+{
+    <script src="@Url.Content("~/Scripts/Home/Index.js")" type="text/javascript"></script>
+}
+
+<h2 style="margin-top: 20px; margin-bottom: 10px">More details results</h2>
+
+<div class="emotionSectionDiv">
+    @foreach (var item in @Model)
+    {
+        if (!string.IsNullOrEmpty(@item.Error))
+        {
+            <span>@item.Error</span>
+        }
+        else
+        {
+            <div class="card personEmotionCard">
+                @if (Model.Count == 1)
+                {
+                    <span>Person Details</span>
+                }
+                else
+                {
+                    <span>Person number @(@Model.IndexOf(item) + 1) details</span>
+                }
+                <span>{</span>
+                <table>
+                    <tr class="emotionsGrid">
+                        <td>Gender: @item.Gender</td>
+                        <td>Age: @item.Age</td>
+                        <td>Smile: @item.Smile</td>
+                        <td>Glasses: @item.Glasses</td>
+                        <td>Face Hair</td>
+                        <td>{</td>
+                            <td class="personDetailsGridRows">Moustache: @item.Moustache</td>
+                            <td class="personDetailsGridRows">Beard: @item.Beard</td>
+                            <td class="personDetailsGridRows">Sideburns: @item.Sideburns</td>
+                        <td>}</td>
+                        <td>Makeup</td>
+                        <td>{</td>
+                            <td class="personDetailsGridRows">Eye Makeup: @item.EyeMakeup</td>
+                            <td class="personDetailsGridRows">Lip Makeup: @item.LipMakeup</td>
+                        <td>}</td>
+                        @if (item.Accessories.Count > 0) {
+                            <td>Accessories</td>
+                            <td>{</td>
+                            foreach (var acc in @item.Accessories)
+                            {
+                                <td class="personDetailsGridRows">Type: @acc.Type - Confidence: @acc.Confidence</td>
+                            }
+                            <td>}</td>
+                        }
+                        <td>Bald: @item.Bald</td>
+                        @if (item.HairColor.Count > 0) {
+                            <td>Hair Colors</td>
+                            <td>{</td>
+                            foreach (var hc in @item.HairColor)
+                            {
+                                <td class="personDetailsGridRows">Color: @hc.Color - Confidence: @hc.Confidence</td>
+                            }
+                            <td>}</td>
+                        }
+                    </tr>
+                </table>
+                <span>}</span>
+            </div>
+        }
+    }
+</div>

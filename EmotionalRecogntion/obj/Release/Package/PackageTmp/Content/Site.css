@@ -1,0 +1,185 @@
+﻿body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+#main-div {
+    width: 100%;
+    display: inline-flex;
+}
+
+.main-divs {
+    margin: 2px;
+    width: 90%; 
+}
+
+.upload-button {
+    margin-left: 34%;
+    margin-top: 10%;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    border-right: 16px solid #afafaf;
+    border-left: 16px solid #afafaf;
+    border-bottom: 16px solid #afafaf;
+    width: 60px;
+    height: 60px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+    position: fixed;
+    top: 50%;
+    left: 47.8%;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.customDisabledBtn {
+    opacity: 0.4 !important;
+    pointer-events: none;
+}
+
+.imageDimensions {
+    max-height: 450px; 
+    max-width: 450px;
+}
+
+.canvasCls {
+    border: 1px solid #d3d3d3;
+    position: relative;
+}
+
+/*#uploadedImageId {
+    height: 350px;
+}*/
+
+.emotionsGrid {
+    text-indent: 60px;
+    display: grid;
+}
+
+.personDetailsGridRows {
+    text-indent: 120px;
+    display: grid;
+}
+
+.emotionSectionDiv {
+    overflow-y: scroll;
+    height: 400px;
+}
+
+.personEmotionCard  {
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+}
+
+    #snackbar.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+@-webkit-keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
