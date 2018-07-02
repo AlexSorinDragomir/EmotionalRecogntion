@@ -61,6 +61,7 @@ namespace EmotionalRecogntion.Utils
         // subscriptionKey
         //public const string SubscriptionKey = "7c0790e2df3d43239dc027790a6700f9";
         //public const string SubscriptionKey = "feec5f5a37204b6d8bfe73e488c18afe";
-        public const string SubscriptionKey = "08ea7161220c44f5b6c6b0bd9dc37425";
+        //public const string SubscriptionKey = "08ea7161220c44f5b6c6b0bd9dc37425";
+        public const string SubscriptionKey = "1df705d899714f87942346e4919beb71";
     }
 }
